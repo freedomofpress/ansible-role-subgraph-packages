@@ -1,19 +1,25 @@
 ---
-# defaults file for ansible-role-subgraph
+# Base apt packages required to configure repos
 subgraph_pre_packages:
   - apt-transport-https
   - gnupg2
 
+# Distribution release in Subgraoh OS nomenclature; "aaron" = "alpha".
 subgraph_release: aaron
+
+# Apt repository sources to provide.
 subgraph_channels:
   - main
 
+# Base repository URL, will be used to generate default list of apt repositories.
+# Override this var if you use a mirror.
 subgraph_apt_repo_url: "https://devrepo.subgraph.com/subgraph"
 
+# Apt repositories to configure.
 subgraph_apt_repos:
   - "deb {{ subgraph_apt_repo_url }} {{ subgraph_release }} {{ subgraph_channels|join(' ') }}"
   - "deb-src {{ subgraph_apt_repo_url }} {{ subgraph_release }} {{ subgraph_channels|join(' ') }}"
 
-subgraph_packages:
-  - paxrat
-  - macouflage
+# Packages to install after Subgraph OS repos are configured, e.g.
+# macouflage, paxrat.
+subgraph_packages: []

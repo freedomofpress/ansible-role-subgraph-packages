@@ -1,5 +1,9 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    subgraph_packages:
+      - macouflage
+      - paxrat
   roles:
     - role: ansible-role-subgraph-packages

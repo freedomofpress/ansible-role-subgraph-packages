@@ -1,38 +1,76 @@
-Role Name
-=========
+Subgraph OS packages Ansible role
+=================================
 
-A brief description of the role goes here.
+Configures apt repositories from the Subgraph OS project, for installing
+apt packages maintained by the Subgraph team.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Assumes Debian Stretch. You'll likely have problems with any other base
+distribution, although judicious use of apt preferences may help.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+# Base apt packages required to configure repos
+subgraph_pre_packages:
+  - apt-transport-https
+  - gnupg2
 
-Dependencies
-------------
+# Distribution release in Subgraoh OS nomenclature; "aaron" = "alpha".
+subgraph_release: aaron
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+# Apt repository sources to provide.
+subgraph_channels:
+  - main
+
+# Base repository URL, will be used to generate default list of apt repositories.
+# Override this var if you use a mirror.
+subgraph_apt_repo_url: "https://devrepo.subgraph.com/subgraph"
+
+# Apt repositories to configure.
+subgraph_apt_repos:
+  - "deb {{ subgraph_apt_repo_url }} {{ subgraph_release }} {{ subgraph_channels|join(' ') }}"
+  - "deb-src {{ subgraph_apt_repo_url }} {{ subgraph_release }} {{ subgraph_channels|join(' ') }}"
+
+# Packages to install after Subgraph OS repos are configured, e.g.
+# macouflage, paxrat.
+subgraph_packages: []
+```
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: ansible-role-subgraph, x: 42 }
+```yaml
+- name: Install SubgraphOS packages.
+  hosts: workstations
+  vars:
+    subgraph_packages:
+      - macouflage
+      - paxrat
+  roles:
+    - role: freedomofpress.subgraph-packages
+```
+
+Running tests
+-------------
+The config tests use both Docker and libvirt-backed VMs to validate
+host state. The container strategy tests only the apt repo functionality,
+whereas the VM strategy installs a custom kernel and tests it.
+
+```
+make test
+```
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Freedom of the Press Foundation (@freedomofpress)
