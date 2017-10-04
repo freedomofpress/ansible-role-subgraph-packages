@@ -1,0 +1,9 @@
+---
+sudo: required
+language: python
+services:
+  - docker
+install:
+  - pip install -r molecule/requirements.txt
+script:
+  - make test-repo
