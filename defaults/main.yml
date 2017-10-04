@@ -1,6 +1,19 @@
 ---
-# defaults file for ansible-role-graph
+# defaults file for ansible-role-subgraph
+subgraph_pre_packages:
+  - apt-transport-https
+  - gnupg2
+
+subgraph_release: aaron
+subgraph_channels:
+  - main
+
+subgraph_apt_repo_url: "https://devrepo.subgraph.com/subgraph"
+
 subgraph_apt_repos:
-  - https://devrepo.subgraph.com
+  - "deb {{ subgraph_apt_repo_url }} {{ subgraph_release }} {{ subgraph_channels|join(' ') }}"
+  - "deb-src {{ subgraph_apt_repo_url }} {{ subgraph_release }} {{ subgraph_channels|join(' ') }}"
 
-
+subgraph_packages:
+  - paxrat
+  - macouflage

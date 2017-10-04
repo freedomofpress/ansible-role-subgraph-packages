@@ -1,10 +1,27 @@
 ---
-# tasks file for ansible-role-graph
+# tasks file for ansible-role-subgraph-packages
+- name: Install Subgraph repo dependencies.
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items: "{{ subgraph_pre_packages }}"
+
+- name: Add Subgraph repo GPG key.
+  apt_key:
+    data: "{{ lookup('file', 'subgraph_os_apt_key.asc') }}"
+    state: present
+
 - name: Add Subgraph repo.
   apt_repository:
     repo: "{{ item }}"
     state: present
-    file: subgraph_os
-  with_items:
-    - "deb [{{ ansible_arch|default('amd64') }}] https://devrepo.subgraph.com/"
-    - "deb-src [{{ ansible_arch|default('amd64') }}] https://devrepo.subgraph.com/"
+    filename: subgraph_os
+  with_items: "{{ subgraph_apt_repos }}"
+
+- name: Install Subgraph packages.
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ subgraph_packages }}"
