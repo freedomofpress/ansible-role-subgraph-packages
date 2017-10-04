@@ -1,0 +1,10 @@
+---
+# tasks file for ansible-role-graph
+- name: Add Subgraph repo.
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    file: subgraph_os
+  with_items:
+    - "deb [{{ ansible_arch|default('amd64') }}] https://devrepo.subgraph.com/"
+    - "deb-src [{{ ansible_arch|default('amd64') }}] https://devrepo.subgraph.com/"

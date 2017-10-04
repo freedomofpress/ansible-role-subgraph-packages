@@ -1,0 +1,6 @@
+---
+# defaults file for ansible-role-graph
+subgraph_apt_repos:
+  - https://devrepo.subgraph.com
+
+
