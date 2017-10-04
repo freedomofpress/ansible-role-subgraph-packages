@@ -1,0 +1,23 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+lint:
+  name: yamllint
+platforms:
+  - name: subgraph-vm
+    # Subgraph OS is based on Debian Stretch
+    box: debian/stretch64
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: grsec-kernel
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

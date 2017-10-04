@@ -1,0 +1,22 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  vars:
+    subgraph_packages:
+      - linux-image-grsec-amd64-subgraph
+      - paxtest
+  roles:
+    - role: ansible-role-subgraph-packages
+  tasks:
+    - name: Reboot host.
+      shell: sleep 2 && reboot
+      ignore_errors: true
+      async: 1
+      poll: 0
+      when: not ansible_kernel.endswith('-subgraph')
+
+    - name: Wait for host to come back.
+      pause:
+        seconds: 15
+      when: not ansible_kernel.endswith('-subgraph')
