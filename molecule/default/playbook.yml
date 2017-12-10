@@ -7,3 +7,9 @@
       - paxrat
   roles:
     - role: ansible-role-subgraph-packages
+  tasks:
+    - name: Upgrade all apt packages.
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        upgrade: dist
