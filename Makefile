@@ -3,18 +3,24 @@ SHELL := /bin/bash
 PWD := $(shell pwd)
 
 .PHONY: test-packages
-test-repo: ## Configures container with SGOS packages.
+test-packages: ## Configures container with SGOS packages.
 	molecule test -s default
+
+.PHONY: test-upgrade
+test-upgrade: ## Configures container with full upgrade to SGOS repos.
+	molecule test -s all-packages
 
 .PHONY: test-kernel
 test-kernel: ## Configures libvirt VM with SGOS hardened kernel.
 	molecule test -s grsec-kernel
 
 .PHONY: test
-test: test-repo test-kernel ## Runs all tests from a clean slate.
-	molecule test -s grsec-kernel
+test: test-packages test-upgrade test-kernel ## Runs all tests from a clean slate.
 
-# Explaination of the below shell command should it ever break.
+.PHONY: ci
+ci: test-packages test-upgrade # Runs all container tests (no VMs).
+
+# Explanation of the below shell command should it ever break.
 # 1. Set the field separator to ": ##" and any make targets that might appear between : and ##
 # 2. Use sed-like syntax to remove the make targets
 # 3. Format the split fields into $$1) the target name (in blue) and $$2) the target descrption
@@ -23,7 +29,6 @@ test: test-repo test-kernel ## Runs all tests from a clean slate.
 # 6. Format columns with colon as delimiter.
 .PHONY: help
 help: ## Print this message and exit.
-	@printf "Makefile for developing and testing SecureDrop.\n"
 	@printf "Subcommands:\n\n"
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9a-zA-Z_-]+:.*?## / {printf "\033[36m%s\033[0m : %s\n", $$1, $$2}' $(MAKEFILE_LIST) \
 		| sort \

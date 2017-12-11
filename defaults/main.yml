@@ -23,3 +23,8 @@ subgraph_apt_repos:
 # Packages to install after Subgraph OS repos are configured, e.g.
 # macouflage, paxrat.
 subgraph_packages: []
+
+# Downgrade priority so that only explicitly requested packages will
+# be installed, never upgrades of other packages standard in Debian.
+# Override by creating a new flat file and setting the filepath here.
+subgraph_apt_preferences_src_file: "{{ role_path+'/files/subgraph_apt_preferences' }}"

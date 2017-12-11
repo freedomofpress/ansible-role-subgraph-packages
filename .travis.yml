@@ -6,4 +6,4 @@ services:
 install:
   - pip install -r molecule/requirements.txt
 script:
-  - make test-repo
+  - make ci

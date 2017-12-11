@@ -5,6 +5,8 @@
     subgraph_packages:
       - macouflage
       - paxrat
+    # Disable pinning, allowing all packages to be upgraded.
+    subgraph_apt_preferences_src_file: /dev/null
   roles:
     - role: ansible-role-subgraph-packages
   tasks:

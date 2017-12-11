@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: subgraph_container
+    # Subgraph OS is based on Debian Stretch
+    image: debian:stretch
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: all-packages
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

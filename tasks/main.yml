@@ -8,6 +8,11 @@
     cache_valid_time: 3600
   with_items: "{{ subgraph_pre_packages }}"
 
+- name: Copy apt preferences to decrease Subgraph repo priority.
+  copy:
+    src: "{{ subgraph_apt_preferences_src_file }}"
+    dest: /etc/apt/preferences.d/subgraph_repo
+
 - name: Add Subgraph repo GPG key.
   apt_key:
     data: "{{ lookup('file', 'subgraph_os_apt_key.asc') }}"
